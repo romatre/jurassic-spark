@@ -6,7 +6,7 @@ ENV NODE_ENV production
 
 COPY index.js ./
 COPY package.json ./
-COPY src ./
+COPY config ./
 
 RUN npm i --production
 

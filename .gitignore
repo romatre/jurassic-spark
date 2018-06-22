@@ -129,4 +129,4 @@ typings/
 .serverless
 .DS_Store
 package-lock.json
-streamer/src/config/production.js
+streamer/config/production.js

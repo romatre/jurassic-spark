@@ -11,9 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "amqp-as-promised": "^4.2.0",
     "amqplib": "^0.5.2",
-    "bluebird": "^3.5.1",
     "web3": "^1.0.0-beta.34"
   }
 }
