@@ -8,10 +8,14 @@ import:
 	./analyser/bin/importer.sh $(file)
 
 import_full:
-	make import file=./analyser/full_data.csv
+	make import file=./full_data.csv
 
 import_sample:
-	make import file=./analyser/sample_data.csv
+	curl -O -L https://www.dropbox.com/s/zz6hj6aeo3p9t11/sample_data.csv.tar.gz?dl=1
+	tar -xzvf sample_data.csv.tar.gz?dl=1
+	make import file=./sample_data.csv
+	rm sample_data.csv.tar.gz?dl=1
+	rm sample_data.csv
 
 import_aggregated_data:
 	curl -O -L https://www.dropbox.com/s/imolmxsaohzzbum/aggregated_transactions_from_min_20_tx.csv.tar.gz?dl=1
