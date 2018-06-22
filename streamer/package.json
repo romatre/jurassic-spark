@@ -1,0 +1,19 @@
+{
+  "name": "streamer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "export NODE_ENV=production && node index.js",
+    "dev": "export NODE_ENV=development && node index.js",
+    "test": "export NODE_ENV=development && node src/__tests__/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqp-as-promised": "^4.2.0",
+    "amqplib": "^0.5.2",
+    "bluebird": "^3.5.1",
+    "web3": "^1.0.0-beta.34"
+  }
+}

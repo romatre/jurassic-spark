@@ -1,0 +1,5 @@
+module.exports = {
+  INITIAL_BLOCK: process.env.INITIAL_BLOCK || 1000,
+  POLLING_INTERVAL: process.env.POLLING_INTERVAL || 5000,
+  CONNECTION_TIMEOUT: process.env.CONNECTION_TIMEOUT || 2000
+}

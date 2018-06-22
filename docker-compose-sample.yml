@@ -2,4 +2,4 @@ version: '2'
 services:
     mongodb:
         volumes:
-          - ./sample_data/db:/data/db
+          - ./analyser/sample_data/db:/data/db
