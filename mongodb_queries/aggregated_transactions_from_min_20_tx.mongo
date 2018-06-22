@@ -1,0 +1,18 @@
+db.getCollection('transactions').aggregate(
+   [
+      {
+        $group : {
+           _id: "$from",
+           count: { $sum: 1 },
+           value: { $sum: "$value" },
+           gas: { $sum: "$gas" },
+           blocks: { $addToSet: "$blockNumber" }
+        }
+      },
+      { $project : { address: 1, count: 1, value: 1, gas: 1, blocks: 1, blocksLength: { $size: "$blocks" } } },
+      { $match : { blocksLength : { $gte: 20 } } },
+      { $project: { blocksLength: 0 } },
+      { $out : "aggregated_transactions_from_min_20_tx" }
+   ],
+   { allowDiskUse: true }
+)

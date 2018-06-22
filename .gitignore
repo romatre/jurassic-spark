@@ -99,3 +99,6 @@ full_data.csv
 spark-warehouse
 sample_data
 venv
+
+aggregated_transactions_from_min_20_tx.csv
+aggregated_transactions_to_min_20_tx.csv
