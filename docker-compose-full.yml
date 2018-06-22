@@ -1,0 +1,5 @@
+version: '2'
+services:
+    mongodb:
+        volumes:
+          - ./full_data/db:/data/db
