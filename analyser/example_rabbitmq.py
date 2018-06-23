@@ -7,7 +7,7 @@ rabbitMq = RabbitMQ("uri", "transaction")
 socket_port = 10101
 polling_time = 1
 
-sc = SparkContext(appName="PythonSqlNetworkWordCount")
+sc = SparkContext(appName="ExampleRabbitMQ")
 ssc = StreamingContext(sc, polling_time)
 
 lines = ssc.socketTextStream("localhost", socket_port)
