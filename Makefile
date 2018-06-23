@@ -30,7 +30,11 @@ import_aggregated_data:
 	rm aggregated_transactions_to_min_20_tx.csv
 
 submit:
-	spark-submit --driver-memory 15G --executor-memory 15G --total-executor-cores 7 --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.2 $(file)
+	spark-submit 	--driver-memory 15G \
+					--executor-memory 15G \
+					--total-executor-cores 7 \
+					--packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.2 \
+					$(file)
 
 docker-build-streamer:
 	docker build -t jurassicspark/streamer ./streamer

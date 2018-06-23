@@ -24,7 +24,7 @@ amqp.connect(config.RABBITMQ_HOST, function(err, conn) {
   };
 
   conn.createChannel(function(err, ch) {
-    ch.assertExchange(TRANSACTION, "fanout", { durable: true });
+    ch.assertExchange(TRANSACTION, "fanout", { durable: false });
     polling(ch, config.INITIAL_BLOCK);
   });
 
