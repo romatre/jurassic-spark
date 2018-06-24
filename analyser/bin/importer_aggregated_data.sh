@@ -1,8 +1,8 @@
+#!/usr/bin/env bash
 mongoimport \
     --db jurassicspark \
     --collection $1 \
     --file $2 \
-    --type csv \
-    --fields "address.auto(),count.auto(),value.auto(),gas.auto(),blocks.auto()" \
-    --columnsHaveTypes \
+    --mode merge \
+    --type json \
     --numInsertionWorkers 8

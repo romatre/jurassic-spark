@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 mongoimport \
     --db jurassicspark \
     --collection transactions \

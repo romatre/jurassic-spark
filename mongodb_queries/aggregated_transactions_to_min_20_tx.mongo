@@ -9,10 +9,8 @@ db.getCollection('transactions').aggregate(
            blocks: { $addToSet: "$blockNumber" }
         }
       },
-      { $project : { address: 1, count: 1, value: 1, gas: 1, blocks: 1, blocksLength: { $size: "$blocks" } } },
-      { $match : { blocksLength : { $gte: 20 } } },
-      { $project: { blocksLength: 0 } },
-      { $out : "aggregated_transactions_to_min_20_tx" }
+      { $project : { _id: 1, count: 1, value: 1, gas: 1, blocks: 1 } },
+      { $out : "aggregated_transactions_to" }
    ],
    { allowDiskUse: true }
 )
