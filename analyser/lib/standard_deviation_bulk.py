@@ -2,7 +2,7 @@ from pyspark.sql import SparkSession
 import numpy as np
 
 
-class StandardDeviation:
+class StandardDeviationBulk:
 
     def __init__(self, database, read_collection_name, write_collection_name, debug = False):
         self.debug = debug

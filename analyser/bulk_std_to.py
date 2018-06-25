@@ -1,4 +1,4 @@
-from lib.standard_deviation import StandardDeviation
+from lib.standard_deviation_bulk import StandardDeviationBulk
 
-std = StandardDeviation("jurassicspark", "aggregated_transactions_to", "std_to", False)
+std = StandardDeviationBulk("jurassicspark", "aggregated_transactions_to", "std_to", False)
 std.execute()
