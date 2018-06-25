@@ -1,57 +1,40 @@
 const Web3 = require("web3");
 const amqp = require("amqplib/callback_api");
-const config = require("./config");
-const web3 = new Web3(config.WEB3_HOST);
-const MongoClient = require('mongodb').MongoClient;
+const { QUEQUE_NAME, RABBITMQ_HOST, INITIAL_BLOCK, WEB3_HOST } = require("./config");
+const web3 = new Web3(WEB3_HOST);
 
 
-amqp.connect(config.RABBITMQ_HOST, function(err, conn) {
+amqp.connect(RABBITMQ_HOST, function(err, conn) {
 
-  const TRANSACTIONS = 'transactions';
-  const TRANSACTIONS_FROM = 'transactions_from';
-  const TRANSACTIONS_TO = 'transactions_to';
-
-  MongoClient.connect(config.MONGODB_URI)
-    .then(async client => {
-        const db = client.db(config.MONGODB_DB);
-        const polling = async (channel, initialBlock) => {
-          setTimeout(async () => {
-            const latestBlockNumber = await web3.eth.getBlockNumber();
-            for (let i = initialBlock; i <= latestBlockNumber; i++) {
-              console.log(i);
-              const block = await web3.eth.getBlock(i);
-              const select = {
-                _id: false,
-                blockNumber: true,
-                from: true,
-                to: true,
-                gas: true,
-                value: true
-              }
-              block.transactions.forEach(async hash => {
-                const { from, to, blockNumber, gas, value } = await web3.eth.getTransaction(hash)
-                const tx = { from, to, blockNumber, gas, value }
-                const oldTransactionsFromUser = await db.collection(TRANSACTIONS).find({
-                  $or: [{ from: from },{ to: from }]
-                }).project(select).toArray();
-                const oldTransactionsToUser = await db.collection(TRANSACTIONS).find({
-                  $or: [{ from: to },{ to: to }]
-                }).project(select).toArray();
-                const message_from = { address: from, transactions: [ tx, ...oldTransactionsFromUser ] }
-                const message_to = { address: to, transactions: [ tx, ...oldTransactionsToUser ] }
-                channel.publish(TRANSACTIONS_FROM, '', new Buffer(JSON.stringify(message_from)));
-                channel.publish(TRANSACTIONS_TO, '', new Buffer(JSON.stringify(message_to)));
-              });
-            }
-            polling(channel, latestBlockNumber + 1);
-          }, 10000)
-        };
-
-        conn.createChannel(function(err, ch) {
-          ch.assertExchange(TRANSACTIONS_FROM, "fanout", { durable: false });
-          ch.assertExchange(TRANSACTIONS_TO, "fanout", { durable: false });
-          polling(ch, config.INITIAL_BLOCK);
+  const polling = async (channel, initialBlock, timeout = 0) => {
+    setTimeout(async () => {
+      const latestBlockNumber = await web3.eth.getBlockNumber();
+      for (let i = initialBlock; i <= latestBlockNumber; i++) {
+        console.log(i);
+        const block = await web3.eth.getBlock(i);
+        const select = {
+          _id: false,
+          blockNumber: true,
+          from: true,
+          to: true,
+          gas: true,
+          value: true
+        }
+        block.transactions.forEach(async hash => {
+          const transaction = await web3.eth.getTransaction(hash)
+          const { timestamp, blockNumber, from, to, gas, gasPrice, value } = transaction
+          const tx = Object.assign({}, { hashTx: transaction.hash },
+            { timestamp, blockNumber, from, to, gas, gasPrice, value })
+          channel.publish(QUEQUE_NAME, '', new Buffer(JSON.stringify(tx)));
         });
-    })
+      }
+      polling(channel, latestBlockNumber + 1, 10000);
+    }, timeout)
+  };
+
+  conn.createChannel(function(err, ch) {
+    ch.assertExchange(QUEQUE_NAME, "fanout", { durable: false });
+    polling(ch, INITIAL_BLOCK);
+  });
 
 });
