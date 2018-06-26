@@ -2,9 +2,12 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const { PORT, MONGODB_URI } = require('./config');
 const services = require('./services')
+const cors = require('@koa/cors');
 
 const app = new Koa();
 const router = new Router();
+
+app.use(cors());
 
 services.getMongoDBConnection().then(db => {
 
@@ -32,8 +35,11 @@ services.getMongoDBConnection().then(db => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_to')
       .find(Object.assign({}, {
-        "standard_deviation": { "$lte": 2 },
-        "number_of_blocks": { "$gte": 50 }
+        "standard_deviation": { "$lte": 2, "$gte": 0 },
+        "number_of_blocks": { "$gte": 20 },
+        "gas": {"$gte": 0 },
+        "value": {"$gte": 0, "$lte": 1053380108336903720000 },
+        "period": {"$gte": 0 },
       }, find))
       .limit(limit)
       .skip(skip)
@@ -45,8 +51,11 @@ services.getMongoDBConnection().then(db => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_from')
       .find(Object.assign({}, {
-        "standard_deviation": { "$lte": 2 },
-        "number_of_blocks": { "$gte": 50 }
+        "standard_deviation": { "$lte": 3, "$gte": 0 },
+        "number_of_blocks": { "$gte": 20 },
+        "gas": {"$gte": 0, "$lte": 31673611 },
+        "value": {"$gte": 0 },
+        "period": {"$gte": 0 },
       }, find))
       .limit(limit)
       .skip(skip)
