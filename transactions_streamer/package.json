@@ -1,5 +1,5 @@
 {
-  "name": "streamer",
+  "name": "transactions_streamer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "amqplib": "^0.5.2",
-    "web3": "^1.0.0-beta.34"
+    "web3": "^1.0.0-beta.34",
+    "mongodb": "^3.0.10"
   }
 }

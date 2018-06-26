@@ -23,6 +23,7 @@ class StandardDeviationStreaming:
             .config("spark.mongodb.input.partitioner", "MongoSamplePartitioner") \
             .config("spark.mongodb.input.partitionerOptions.partitionSizeMB", "6000") \
             .getOrCreate()
+        self.spark.sparkContext.setLogLevel('WARN')
 
     def execute(self):
         lines = self.ssc.socketTextStream("localhost", self.socket_port)
@@ -54,9 +55,9 @@ class StandardDeviationStreaming:
                 .mode("overwrite").save()
 
     @staticmethod
-    def calculate_std(row):
-        transactions = row["transactions"]
-        address = row["address"]
+    def calculate_std(line):
+        transactions = line["transactions"]
+        address = line["address"]
         blocks = list(map(lambda t: t["blockNumber"], transactions))
         blocks = np.sort(blocks)
         blocks = np.unique(blocks)

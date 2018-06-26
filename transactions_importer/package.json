@@ -1,5 +1,5 @@
 {
-  "name": "full_downloader",
+  "name": "transactions_importer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

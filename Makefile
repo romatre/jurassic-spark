@@ -47,6 +47,3 @@ bulk_from:
 
 bulk_to:
 	make submit file=./analyser/bulk_std_to.py
-
-docker-build-streamer:
-	docker build -t jurassicspark/streamer ./streamer

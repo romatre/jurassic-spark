@@ -1,10 +1,10 @@
 {
-  "name": "writer",
+  "name": "transactions_writer",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "export NODE_ENV=production && node index.js"
   },
   "author": "",
   "license": "ISC",

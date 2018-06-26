@@ -1,7 +1,7 @@
 from lib.standard_deviation_streaming import StandardDeviationStreaming
 
 queque = {
-    "name": "transactions_from"
+    "name": "INBOUND_TRANSACTIONS"
 }
 
 output = {
@@ -9,5 +9,5 @@ output = {
     "collection": "std_from"
 }
 
-std = StandardDeviationStreaming(queque=queque, output=output, debug=False)
+std = StandardDeviationStreaming(queque=queque, output=output, debug=True)
 std.execute()
