@@ -27,3 +27,4 @@ typings/
 .serverless
 .DS_Store
 package-lock.json
+config/production.js

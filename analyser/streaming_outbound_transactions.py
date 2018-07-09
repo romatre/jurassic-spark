@@ -1,7 +1,7 @@
 from lib.standard_deviation_streaming import StandardDeviationStreaming
 
 queque = {
-    "name": "transactions_to"
+    "name": "OUTBOUND_TRANSACTIONS"
 }
 
 output = {
