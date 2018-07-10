@@ -40,6 +40,7 @@ class ChainGraph() extends Serializable {
     Graph(verts, edges)
   }
 
+
   // 0.001 is less precise yet leads to faster termination, you can use 0.0001 instead
   def pageRankGraph(tolerance:Double = 0.001, resetProb:Double = 0.15): Graph[Double, Double] = {
     graph.pageRank(tolerance, resetProb)
