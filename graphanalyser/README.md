@@ -11,6 +11,7 @@ A type-safe configuration library for JVM languages: <https://lightbend.github.i
 
 # Storage/Saving strategy
 in reference.conf the saving strategy is tunable but is set to **"hdfs"** as default
+NOTE: you must specify the proper URI
 
 # Main
 Run main in **com.graphanalyser.GraphAnalyser**
