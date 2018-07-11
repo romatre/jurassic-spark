@@ -35,7 +35,7 @@ services.getMongoDBConnection().then(db => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_to')
       .find(Object.assign({}, {
-        "standard_deviation": { "$lte": 2, "$gte": 0 },
+        "standard_deviation": { "$lte": 3, "$gte": 0 },
         "number_of_blocks": { "$gte": 20 },
         "gas": {"$gte": 0 },
         "value": {"$gte": 0, "$lte": 1053380108336903720000 },
@@ -43,7 +43,7 @@ services.getMongoDBConnection().then(db => {
       }, find))
       .limit(limit)
       .skip(skip)
-      .sort({ number_of_blocks: -1 })
+      .sort({ period: -1 })
       .toArray();
   });
 
@@ -59,7 +59,7 @@ services.getMongoDBConnection().then(db => {
       }, find))
       .limit(limit)
       .skip(skip)
-      .sort({ number_of_blocks: -1 })
+      .sort({ period: -1 })
       .toArray();
   });
 

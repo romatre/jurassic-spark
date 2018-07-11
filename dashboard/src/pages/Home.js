@@ -10,7 +10,7 @@ const columns = [
   {
     id: 'address',
     Header: 'Address',
-    accessor: d => d.address,
+    accessor: d => <a target="_blank" href={`https://etherscan.io/address/${d.address}`}>{d.address}</a>,
   },
   {
     id: 'standard_deviation',
@@ -129,6 +129,7 @@ class Home extends React.Component {
         data.values.length > 0 &&
         <div className={className} onClick={() => this.setState({ zoom: { y, x } })}>
           <ScatterPlot
+            tooltipHtml={(px, py) => <div className="tooltip"><span>{`${x}: ${px}`}</span><span>{`${y}: ${py}`}</span></div>}
             rScale={() => rscale}
             data={data}
             width={width || this.state.dimensions.width}
@@ -181,27 +182,18 @@ class Home extends React.Component {
               {({ measureRef }) => <li ref={measureRef}></li>}
             </Measure>
 
-            <li className="scatterplot-label">STD</li>
             <li className="scatterplot-label">Gas</li>
             <li className="scatterplot-label">Value</li>
             <li className="scatterplot-label">Period</li>
-            <li className="scatterplot-label">STD</li>
-            <li></li>
-            <li>{scatterplot('standard_deviation', 'gas')}</li>
-            <li>{scatterplot('standard_deviation', 'value')}</li>
-            <li>{scatterplot('standard_deviation', 'period')}</li>
             <li className="scatterplot-label">Gas</li>
-            <li>{scatterplot('gas', 'standard_deviation')}</li>
             <li></li>
             <li>{scatterplot('gas', 'value')}</li>
             <li>{scatterplot('gas', 'period')}</li>
             <li className="scatterplot-label">Value</li>
-            <li>{scatterplot('value', 'standard_deviation')}</li>
             <li>{scatterplot('value', 'gas')}</li>
             <li></li>
             <li>{scatterplot('value', 'period')}</li>
             <li className="scatterplot-label">Period</li>
-            <li>{scatterplot('period', 'standard_deviation')}</li>
             <li>{scatterplot('period', 'gas')}</li>
             <li>{scatterplot('period', 'value')}</li>
             <li></li>
@@ -214,8 +206,8 @@ class Home extends React.Component {
           >
             {({ measureRef }) => <div className="scatterplot-zoom" ref={measureRef}>
               {this.state.zoom && <div>
-                <h3>{this.state.zoom.x.split('_').join(' ')}, {this.state.zoom.y.split('_').join(' ')}</h3>
-                {scatterplot(this.state.zoom.y, this.state.zoom.x, this.state.dimensionsZoom.width, 500, {top: 100, bottom: 5, left: 5, right: 5}, 10, '')}
+                <h3>x: {this.state.zoom.x.split('_').join(' ')}, y: {this.state.zoom.y.split('_').join(' ')}</h3>
+                {scatterplot(this.state.zoom.y, this.state.zoom.x, this.state.dimensionsZoom.width, 400, {top: 50, bottom: 5, left: 5, right: 5}, 20, '')}
               </div>}
             </div>}
           </Measure>

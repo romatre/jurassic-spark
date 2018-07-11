@@ -1,18 +1,16 @@
 package lib
 
+import com.RankedGraph
 import com.mongodb.spark.MongoSpark
-import org.apache.spark.graphx._
 import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.spark.graphx._
+import org.apache.spark.sql.SparkSession
 
 
 object Saver{
 
   val projectConf: Config = ConfigFactory.load()
-  // accessory classes to store data with associated names
-  case class RankedTx(from:String, fromRank:Double, to:String, toRank:Double, hashTx:String, value:Double, gas:Int)
-  case class RankedNode(address:String, rank:Double)
-
-  val sparkSes = Session.sparkSession
+  val sparkSes: SparkSession = Session.sparkSession
 
 
   /**
@@ -26,18 +24,12 @@ object Saver{
     *               each triplet is wrapped into a RankedTX object
     */
   def saveTripletsRanked100(ranked: Graph[(String, Double), String]): Unit = {
-
-    val writeConf = Session.getWriteConfig("triplets").get
-    // necessary to get DataSets from RDDs
-    import sparkSes.implicits._
-
+    val writeConf = Session.getWriteConfig("triplets") match {
+      case None => throw new IllegalArgumentException("ERROR not 'triplets'")
+      case Some(wcf) => wcf
+    }
     // triplets
-    val rankedTripletsDS = ranked.triplets.map { r =>
-      val t = r.toTuple
-      val Array(h, v, g) = t._3.substring(1, t._3.length - 1).split(",") // hashTx, value, gas
-      RankedTx(t._1._2._1, t._1._2._2, t._2._2._1, t._2._2._2, h, v.toDouble, g.toInt)
-    }.toDS()
-
+    val rankedTripletsDS = RankedGraph.getTripletsDS(ranked)
     MongoSpark.save(rankedTripletsDS, writeConf)
   }
 
@@ -53,20 +45,40 @@ object Saver{
     */
   def saveVerticesRanked100(ranked: Graph[(String, Double), String]): Unit = {
     // necessary to get DataSets from RDDs
-    val writeConf = Session.getWriteConfig("vertices")  match {
-      case None => throw new IllegalArgumentException("ERROR")
+    val writeConf = Session.getWriteConfig("vertices") match {
+      case None => throw new IllegalArgumentException("ERROR not 'vertices'")
       case Some(wcf) => wcf
     }
-
-    println(writeConf.toString)
-
-    import sparkSes.implicits._
-
-    val rankedNodesDS = ranked.vertices
-      .map( v => RankedNode(v._2._1, v._2._2))
-      .toDS()
-
+    val rankedNodesDS = RankedGraph.getVerticesDS(ranked)
     MongoSpark.save(rankedNodesDS, writeConf)
 
   }
+
+
+  def saveAll(ranked: Graph[(String, Double), String]): Unit = {
+    saveVerticesRanked100(ranked)
+    saveTripletsRanked100(ranked)
+  }
+
+
+  def save(ranked: Graph[(String, Double), String]): Unit = {
+    val strategy = projectConf.getString("graph-analyser.savingStrategy")
+
+    strategy match {
+      case "hdfs" => {
+        RankedGraph.getVerticesDS(ranked)
+          .coalesce(1)
+          .write.format("json")
+          .save(projectConf.getString("graph-analyser.HDFSuriVertices"))
+
+        RankedGraph.getTripletsDS(ranked)
+          .coalesce(1)
+          .write.format("json")
+          .save(projectConf.getString("graph-analyser.HDFSuriTriplets"))
+      }
+      case "mongodb" => saveAll(ranked)
+      case _ => println("\n       ERROR WRONG SAVING STRATEGY       \n")
+    }
+  }
+
 }

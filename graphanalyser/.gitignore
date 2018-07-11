@@ -24,13 +24,14 @@ project/plugins/project/
 .lib/
 
 .src/main/scala/spark-warehouse/
-
+.src/main/scala/com/graphanalyser/spark-warehouse
 
 *.iml
 *.ipr
 *.iws
 .idea
 out
+
 
 build
 .classpath
