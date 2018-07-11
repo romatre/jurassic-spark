@@ -1,10 +1,8 @@
 package lib
 
 import com.mongodb.spark.MongoSpark
-import com.sun.tools.internal.ws.processor.generator.CustomExceptionGenerator
 import org.apache.spark.graphx._
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.spark.sql.SparkSession
 
 
 object Saver{
