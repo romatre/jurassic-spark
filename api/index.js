@@ -31,6 +31,26 @@ services.getMongoDBConnection().then(db => {
       .toArray();
   });
 
+  router.get('/top100Triplets', async (ctx, next) => {
+    const { skip, limit, find, sort } = ctx;
+    ctx.body = await db.collection('top100Triplets')
+      .find(find)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
+      .toArray();
+  });
+
+  router.get('/top100Vertices', async (ctx, next) => {
+    const { skip, limit, find, sort } = ctx;
+    ctx.body = await db.collection('top100Vertices')
+      .find(find)
+      .limit(limit)
+      .skip(skip)
+      .sort(sort)
+      .toArray();
+  });  
+
   router.get('/std_to', async (ctx, next) => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_to')
@@ -62,6 +82,7 @@ services.getMongoDBConnection().then(db => {
       .sort({ period: -1 })
       .toArray();
   });
+
 
   app
     .use(router.routes())
