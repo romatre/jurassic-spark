@@ -13,7 +13,7 @@ object Session {
   val sparkSession: SparkSession = SparkSession.builder()
     .master(projectConf.getString("graph-analyser.master"))
     .appName(projectConf.getString("graph-analyser.appname"))
-    .config("spark.mongodb.input.uri", projectConf.getString("graph-analyser.inputUri"))
+    .config("spark.mongodb.input.uri", projectConf.getString("graph-analyser.inputUriMongo"))
     .config("spark.mongodb.output.database", projectConf.getString("graph-analyser.db"))
     .getOrCreate()
 

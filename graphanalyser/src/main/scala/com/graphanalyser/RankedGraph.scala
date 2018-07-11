@@ -1,7 +1,6 @@
 package com
 
 import com.graphanalyser.ChainGraph
-import com.typesafe.config.{Config, ConfigFactory}
 import lib.Session
 import org.apache.spark.graphx.Graph
 import org.apache.spark.sql.{Dataset, SparkSession}
@@ -9,7 +8,6 @@ import org.apache.spark.sql.{Dataset, SparkSession}
 
 object RankedGraph {
 
-  val projectConf: Config = ConfigFactory.load()
   val sparkSes: SparkSession = Session.sparkSession
   // accessory classes to store data with associated names
   case class RankedTx(from:String, fromRank:Double, to:String, toRank:Double, hashTx:String, value:Double, gas:Int)

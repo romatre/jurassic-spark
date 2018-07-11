@@ -1,6 +1,7 @@
 package com.graphanalyser
 import _root_.lib.Session
 import com.mongodb.spark.MongoSpark
+import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
@@ -8,16 +9,46 @@ import org.apache.spark.sql.SparkSession
 
 class ChainGraph() extends Serializable {
 
-  // [address, hashTx]
-  var graph: Graph[String, String] = graphFromSparkSession()
+  val projectConf: Config = ConfigFactory.load()
 
-  def createID(address: AnyRef): VertexId = {
+  // [address, hashTx]
+  var graph: Graph[String, String] = create()
+
+  def createID(address: Any): VertexId = {
     val addr = address.toString
     java.lang.Long.parseLong(addr.substring(2, 10).concat(addr.substring(17, 24)), 16)
   }
 
 
-  def graphFromSparkSession(): Graph[String, String] = {
+  /* SOURCE: hashTx timestamp blockNumber from to gas gasPrice value */
+  def graphFromCsv(): Graph[String, String] = {
+    val session: SparkSession = Session.sparkSession
+    val inputUri: String = projectConf.getString("graph-analyser")
+
+    val transactions = session.read
+      .format("csv")
+      .option("inferSchema", "true")
+      .load(inputUri)
+      .filter(r => !(r.get(3).equals("") || r.get(4).equals("")))
+      .map(
+        r => (
+          (createID(r.get(3)), r.get(3).asInstanceOf[String]),
+          (createID(r.get(4)), r.get(4).asInstanceOf[String]),
+          (r.get(0), r.get(7), r.get(5)).toString().toLowerCase
+        )).rdd
+
+    val verts = VertexRDD.apply(transactions
+      .flatMap(r => List(r._1, r._2))
+      .distinct())
+
+    val edges = EdgeRDD.fromEdges(transactions
+      .map(e => Edge(e._1._1, e._2._1, e._3)))
+
+    Graph(verts, edges)
+  }
+
+
+  def graphFromMongoDB(): Graph[String, String] = {
     val session: SparkSession = Session.sparkSession
 
     // fromNode, toNode, (hashTx, value, gas)
@@ -38,6 +69,14 @@ class ChainGraph() extends Serializable {
       .map(e => Edge(e._1._1, e._2._1, e._3))
 
     Graph(verts, edges)
+  }
+
+
+  def create(): Graph[String, String] = {
+    projectConf.getString("graph-analyser.readingStrategy") match {
+      case "hdfs" => graphFromCsv()
+      case "mongo" => graphFromMongoDB()
+    }
   }
 
 
