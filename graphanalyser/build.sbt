@@ -13,5 +13,8 @@ libraryDependencies ++= Seq(
   spark %% "spark-graphx" % sparkVersion,
   "org.mongodb.spark" %% "mongo-spark-connector" % "2.2.3",
   "com.databricks" %% "spark-csv" % "1.5.0",
-  "com.typesafe" % "config" % "1.3.2"
+  "com.typesafe" % "config" % "1.3.2",
+  "com.google.cloud" % "google-cloud-storage" % "1.35.0"
 )
+
+
