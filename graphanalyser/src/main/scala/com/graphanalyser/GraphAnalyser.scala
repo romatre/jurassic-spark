@@ -1,10 +1,7 @@
 package com.graphanalyser
 
-import lib.{Saver, Session}
+import lib.Saver
 import com.RankedGraph.top100PageRank
-import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.spark.graphx.VertexId
-import org.apache.spark.sql.SparkSession
 
 
 object GraphAnalyser {
