@@ -10,6 +10,7 @@ import org.apache.spark.sql.SparkSession
 class ChainGraph() extends Serializable {
 
   val projectConf: Config = ConfigFactory.load()
+  val session: SparkSession = Session.sparkSession
 
   // [address, hashTx]
   var graph: Graph[String, String] = create()
@@ -22,24 +23,25 @@ class ChainGraph() extends Serializable {
 
   /* SOURCE: hashTx timestamp blockNumber from to gas gasPrice value */
   def graphFromCsv(): Graph[String, String] = {
-    val session: SparkSession = Session.sparkSession
-    val inputUri: String = projectConf.getString("graph-analyser")
+    val inputUri: String = projectConf.getString("graph-analyser.inputUriHDFS")
+
+    import session.implicits._
 
     val transactions = session.read
       .format("csv")
       .option("inferSchema", "true")
+      .option("header", false)
+      .option("treatEmptyValuesAsNulls", "true")
       .load(inputUri)
-      .filter(r => !(r.get(3).equals("") || r.get(4).equals("")))
-      .map(
-        r => (
-          (createID(r.get(3)), r.get(3).asInstanceOf[String]),
-          (createID(r.get(4)), r.get(4).asInstanceOf[String]),
-          (r.get(0), r.get(7), r.get(5)).toString().toLowerCase
-        )).rdd
+      .filter(el => !el.isNullAt(3) && !el.isNullAt(4))
+      .map(r => ((createID(r.get(3)), r.getString(3)), (createID(r.get(4)), r.getString(4)),
+        (r.getString(0), r.get(7).asInstanceOf[Number].doubleValue(), r.get(5).asInstanceOf[Number].intValue())
+          .toString()))
+      .rdd
 
-    val verts = VertexRDD.apply(transactions
-      .flatMap(r => List(r._1, r._2))
-      .distinct())
+    val verts = transactions
+      .flatMap(r => List((r._1._1, r._1._2.toString), (r._2._1, r._2._2.toString)))
+      .distinct()
 
     val edges = EdgeRDD.fromEdges(transactions
       .map(e => Edge(e._1._1, e._2._1, e._3)))
@@ -49,7 +51,7 @@ class ChainGraph() extends Serializable {
 
 
   def graphFromMongoDB(): Graph[String, String] = {
-    val session: SparkSession = Session.sparkSession
+    // val session: SparkSession = Session.sparkSession
 
     // fromNode, toNode, (hashTx, value, gas)
     val transactions = MongoSpark.load(session.sparkContext)

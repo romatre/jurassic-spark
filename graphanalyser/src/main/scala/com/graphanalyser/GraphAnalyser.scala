@@ -1,7 +1,11 @@
 package com.graphanalyser
 
-import lib.Saver
+import lib.{Saver, Session}
 import com.RankedGraph.top100PageRank
+import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.spark.graphx.VertexId
+import org.apache.spark.sql.SparkSession
+
 
 object GraphAnalyser {
 
@@ -13,5 +17,6 @@ object GraphAnalyser {
     // see reference.conf for saving strategy
     Saver.save(top100)
 
+    // ethGraph.graph.triplets.take(10).foreach(println)
   }
 }
