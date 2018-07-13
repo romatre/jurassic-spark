@@ -29,7 +29,7 @@ class ChainGraph() extends Serializable {
     val transactions = session.read
       .format("csv")
       .option("inferSchema", "true")
-      .option("header", false)
+      .option("header", value = false)
       .option("treatEmptyValuesAsNulls", "true")
       .load(inputUri)
       .filter(el => !el.isNullAt(3) && !el.isNullAt(4))
