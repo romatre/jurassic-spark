@@ -6,7 +6,6 @@ import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
-
 class ChainGraph() extends Serializable {
 
   val projectConf: Config = ConfigFactory.load()
@@ -23,8 +22,8 @@ class ChainGraph() extends Serializable {
 
   /* SOURCE: hashTx timestamp blockNumber from to gas gasPrice value */
   def graphFromCsv(): Graph[String, String] = {
-    val inputUri: String = projectConf.getString("graph-analyser.inputUriHDFS")
 
+    val inputUri: String = projectConf.getString("graph-analyser.inputUriHDFS")
     import session.implicits._
 
     val transactions = session.read
