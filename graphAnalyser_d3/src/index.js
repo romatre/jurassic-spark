@@ -1,19 +1,17 @@
-Promise.all([
-    fetch(`http://localhost:3030/top100Vertices?limit=2000`),
-    fetch(`http://localhost:3030/top100Triplets?limit=2000`)
-])
-    .then(results => Promise.all(results.map(r => r.json())))
-    .then(([verts, triplets]) => {
+import 'babel-polyfill';
 
-        let address2node = {};
+const tadaaan = async () => {
+    const verts = await fetch(`http://localhost:3030/top100Vertices?limit=2000`).then(r => r.json());
+    const triplets = await fetch(`http://localhost:3030/top100Triplets?limit=2000`).then(r => r.json());
 
-        verts.forEach((v, ind) => {
-            address2node[v.address] = ind;
-        })
+    let address2node = {};
 
-        return [ verts, triplets, address2node];
+    verts.forEach((v, ind) => {
+        address2node[v.address] = ind;
     })
-    .then(([ verts, triplets, address2node]) => ({
+
+
+    return {
         vertices: verts.map( v => ({
             id: v.address,
             rank: v.rank
@@ -23,5 +21,8 @@ Promise.all([
             to: address2node[t.to],
             value: t.value
         }))
-    }))
-    .then(console.log)
+    }
+
+}
+
+tadaaan().then(console.log);
