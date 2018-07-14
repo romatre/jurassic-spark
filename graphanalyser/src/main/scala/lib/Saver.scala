@@ -1,6 +1,6 @@
 package lib
 
-import com.RankedGraph
+import com.graphanalyser.RankedGraph
 import com.mongodb.spark.MongoSpark
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.spark.graphx._
@@ -65,7 +65,7 @@ object Saver{
     val strategy = projectConf.getString("graph-analyser.savingStrategy")
 
     strategy match {
-      case "hdfs" => {
+      case "hdfs" =>
         RankedGraph.getVerticesDS(ranked)
           .coalesce(1)
           .write.format("json")
@@ -75,7 +75,6 @@ object Saver{
           .coalesce(1)
           .write.format("json")
           .save(projectConf.getString("graph-analyser.HDFSuriTriplets"))
-      }
       case "mongodb" => saveAll(ranked)
       case _ => println("\n       ERROR WRONG SAVING STRATEGY       \n")
     }
