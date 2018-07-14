@@ -1,11 +1,10 @@
 package com.graphanalyser
 
 import lib.Saver
-import com.RankedGraph.top100PageRank
+import com.graphanalyser.RankedGraph.top100PageRank
 
 
 object GraphAnalyser {
-
   def main(args: Array[String]): Unit = {
 
     val ethGraph = new ChainGraph()
@@ -13,7 +12,5 @@ object GraphAnalyser {
 
     // see reference.conf for saving strategy
     Saver.save(top100)
-
-    // ethGraph.graph.triplets.take(10).foreach(println)
   }
 }

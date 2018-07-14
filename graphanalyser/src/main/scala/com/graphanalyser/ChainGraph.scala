@@ -76,7 +76,7 @@ class ChainGraph() extends Serializable {
   def create(): Graph[String, String] = {
     projectConf.getString("graph-analyser.readingStrategy") match {
       case "hdfs" => graphFromCsv()
-      case "mongo" => graphFromMongoDB()
+      case "mongodb" => graphFromMongoDB()
     }
   }
 
