@@ -1,6 +1,5 @@
-package com
+package com.graphanalyser
 
-import com.graphanalyser.ChainGraph
 import lib.Session
 import org.apache.spark.graphx.Graph
 import org.apache.spark.sql.{Dataset, SparkSession}
