@@ -2,7 +2,7 @@ Promise.all([
     fetch(`http://localhost:3030/top100Vertices?limit=2000`),
     fetch(`http://localhost:3030/top100Triplets?limit=2000`)
 ])
-    .then(results => results.map(r => r.json()))
+    .then(results => Promise.all(results.map(r => r.json())))
     .then(([verts, triplets]) => {
 
         let address2node = {};
@@ -23,4 +23,5 @@ Promise.all([
             to: address2node[t.to],
             value: t.value
         }))
-    }));
+    }))
+    .then(console.log)
