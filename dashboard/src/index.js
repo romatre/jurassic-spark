@@ -1,33 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './pages/Home';
-import About from './pages/About';
-import Topics from './pages/Topics';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import Home from './pages/Home/Home';
+import OutboundPeriodicTransactions from './pages/PeriodicTransactions/OutboundPeriodicTransactions';
+import InboundPeriodicTransactions from './pages/PeriodicTransactions/InboundPeriodicTransactions';
+import Pagerank from './pages/Pagerank/Pagerank';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Menu from "./components/MenuComponent/menu";
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
 const App = () => (
   <Router>
     <div>
-        <ul id="menu">
-          <div className="wrap-menu">
-            <h1 className="logo">Jurassic<span>Spark</span></h1>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/topics">Transactions</Link></li>
-            <li><Link to="/about">Team</Link></li>
-          </div>
-        </ul>
-
-      <div className="wrap wrap-padding">
-        <Route exact path="/" component={Home}/>
-        <Route path="/topics" component={Topics}/>
-        <Route path="/about" component={About}/>
-      </div>
+      <Menu />
+      <Route exact path="/" component={Home}/>
+      <Route exact path="/outbound_transactions" component={OutboundPeriodicTransactions}/>
+      <Route exact path="/inbound_transactions" component={InboundPeriodicTransactions}/>
+      <Route path="/pagerank" component={Pagerank}/>
     </div>
   </Router>
 )

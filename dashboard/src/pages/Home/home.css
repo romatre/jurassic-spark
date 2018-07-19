@@ -1,0 +1,21 @@
+.Home__title {
+    padding-bottom: 1em;
+}
+
+.Home__columns__entry {
+    line-height: 1.6em;
+}
+
+.Home__columns__entry > p {
+    padding-right: 1em;
+    padding-bottom: 1em;
+}
+
+.Home > h2, .Home > h3, .Home > h4 {
+    margin-top: 1em;
+    margin-bottom: .5em;
+}
+
+.Home li {
+    list-style: none;
+}

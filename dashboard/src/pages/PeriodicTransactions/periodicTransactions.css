@@ -1,0 +1,41 @@
+.PeriodicTransactions__title {
+    margin-bottom: 1em;
+}
+
+.PeriodicTransactions__columns {
+    width: 100%;
+    overflow: auto;
+}
+
+.PeriodicTransactions__columns > div {
+    float: left;
+    width: calc(50% - 1em);
+    padding-right: 1em;
+    overflow: auto;
+}
+
+.PeriodicTransactions__filters {
+    overflow: auto;
+    background: #34495e;
+    margin-bottom: 1em;
+    border-radius: 3px;
+}
+
+.PeriodicTransactions__filters > form {
+    float: left;
+    padding: 1em;
+    width: calc(33% - 2em);
+    color: #f1c40f;
+}
+
+.PeriodicTransactions__filters > form > input {
+    font-size: .8em;
+    background: #f1c40f;
+    color: #34495e;
+    font-weight: bold;
+    padding: .5em;
+    border-radius: 3px;
+    border: 1px solid #f1c40f;
+    margin: .5em 0;
+    width: calc(100% - 1em - 2px);
+}

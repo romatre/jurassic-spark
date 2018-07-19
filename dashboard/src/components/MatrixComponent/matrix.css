@@ -1,0 +1,39 @@
+.Matrix {
+    margin-bottom: 1em;
+    position: relative;
+    padding-top: 1.5em;
+    padding-left: 1.5em;
+}
+
+.Matrix__horizontal-labels > li {
+    position: absolute;
+    list-style: none;
+    font-weight: bold;
+}
+
+.Matrix__vertical-labels {
+    position: absolute;
+    bottom: .5em;
+    left: 0;
+    transform: rotate(-90deg);
+}
+
+.Matrix__vertical-labels > li {
+    position: absolute;
+    list-style: none;
+    font-weight: bold;
+    padding-left: 1.5em;
+}
+
+.Matrix__row {
+    width: 100%;
+    display: flex;
+    overflow: auto;
+}
+
+.Matrix__column {
+    flex: 1;
+    display: block;
+    float: left;
+    overflow: hidden;
+}

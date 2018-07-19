@@ -1,0 +1,15 @@
+#graph {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 50px);
+}
+.node {
+    stroke: #000000;
+    stroke-width: 1px;
+}
+.link {
+    fill: none;
+    stroke: #bbb;
+}

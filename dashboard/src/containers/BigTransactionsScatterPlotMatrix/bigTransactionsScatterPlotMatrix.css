@@ -1,0 +1,9 @@
+.BigTransactionsScatterPlotMatrix {
+    position: relative;
+}
+
+.BigTransactionsScatterPlotMatrix__title {
+    position: absolute;
+    top: -1em;
+    right: 0;
+}

@@ -28,7 +28,9 @@ services.getMongoDBConnection().then(db => {
       .limit(limit)
       .skip(skip)
       .sort(sort)
-      .toArray();
+      .toArray().then(txs => {
+        return txs.map(d => Object.assign({}, d, { value: d.value/1000000000000000000 }));
+      })
   });
 
   router.get('/top100Triplets', async (ctx, next) => {
@@ -49,9 +51,9 @@ services.getMongoDBConnection().then(db => {
       .skip(skip)
       .sort(sort)
       .toArray();
-  });  
+  });
 
-  router.get('/std_to', async (ctx, next) => {
+  router.get('/periodicTransactions/outbound', async (ctx, next) => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_to')
       .find(Object.assign({}, {
@@ -64,10 +66,12 @@ services.getMongoDBConnection().then(db => {
       .limit(limit)
       .skip(skip)
       .sort({ period: -1 })
-      .toArray();
+      .toArray().then(txs => {
+        return txs.map(d => Object.assign({}, d, { value: d.value/1000000000000000000 }));
+      })
   });
 
-  router.get('/std_from', async (ctx, next) => {
+  router.get('/periodicTransactions/inbound', async (ctx, next) => {
     const { skip, limit, find } = ctx;
     ctx.body = await db.collection('std_from')
       .find(Object.assign({}, {
@@ -80,9 +84,10 @@ services.getMongoDBConnection().then(db => {
       .limit(limit)
       .skip(skip)
       .sort({ period: -1 })
-      .toArray();
+      .toArray().then(txs => {
+        return txs.map(d => Object.assign({}, d, { value: d.value/1000000000000000000 }));
+      })
   });
-
 
   app
     .use(router.routes())

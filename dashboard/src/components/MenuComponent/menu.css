@@ -1,0 +1,31 @@
+#menu {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: #34495e;
+}
+#menu li {
+    display: block;
+    list-style: none;
+}
+#menu li a {
+    display: block;
+    float: left;
+    padding: 1em 2em;
+    background: #2c3e50;
+    color: #ecf0f1;
+    border-left: 1px solid #34495e;
+}
+#menu li a:hover {
+    color: #000;
+    background: #f1c40f;
+}
+.wrap-menu {
+    width: 100%;
+    min-width: 800px;
+    padding: 0 2em;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
